@@ -38,12 +38,10 @@ class BootConfdListener implements ListenerInterface
     {
         $this->logger->debug('Confd watch start.');
 
-        $interval = (int) $this->config->get('confd.interval', 1);
-
         $this->confd->watch();
 
         while (true) {
-            $isExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield($interval);
+            $isExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield(1);
 
             if ($isExited) {
                 break;

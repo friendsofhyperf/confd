@@ -41,9 +41,10 @@ class Confd
         Coroutine::create(function () {
             CoordinatorManager::until(Constants::WORKER_START)->yield();
             $eventDispatcher = $this->container->get(EventDispatcherInterface::class);
+            $interval = (int) $this->config->get('confd.interval', 1);
 
             while (true) {
-                $isExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield(1);
+                $isExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield($interval);
 
                 if ($isExited) {
                     break;
