@@ -23,7 +23,7 @@ class Confd
 {
     private DriverInterface $driver;
 
-    public function __construct(private ContainerInterface $container, private ConfigInterface $config, private EventDispatcherInterface $eventDispatcher)
+    public function __construct(private ContainerInterface $container, private ConfigInterface $config)
     {
         $driver = $this->config->get('confd.default', 'etcd');
         $class = $this->config->get('confd.drivers.' . $driver);
@@ -39,6 +39,7 @@ class Confd
     {
         Coroutine::create(function () {
             CoordinatorManager::until(Constants::WORKER_START)->yield();
+            $eventDispatcher = $this->container->get(EventDispatcherInterface::class);
 
             while (true) {
                 $isExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield(1);
@@ -48,7 +49,7 @@ class Confd
                 }
 
                 if ($this->driver->isChanged()) {
-                    $this->eventDispatcher->dispatch(new ConfigChanged());
+                    $eventDispatcher->dispatch(new ConfigChanged());
                 }
             }
         });
