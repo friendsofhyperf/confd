@@ -107,10 +107,10 @@ class Writer
      *
      * @param array $values The values as key => value pairs
      */
-    public function setValues(array $values): self
+    public function setValues(array $values, bool $forceQuote = false): self
     {
         foreach ($values as $key => $value) {
-            $this->set($key, $value);
+            $this->set($key, $value, $forceQuote);
         }
 
         return $this;
