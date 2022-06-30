@@ -19,4 +19,4 @@ php bin/hyperf.php confd:env
 ## Support
 
 - [x] Etcd
-- [] Consul
+- [ ] Consul
