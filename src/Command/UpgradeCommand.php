@@ -21,7 +21,7 @@ use Psr\Container\ContainerInterface;
 #[Command()]
 class UpgradeCommand extends HyperfCommand
 {
-    protected ?string $signature = 'confd:upgrade';
+    protected ?string $signature = 'confd:env';
 
     protected string $description = 'Upgrade .env from etcd.';
 
