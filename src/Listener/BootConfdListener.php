@@ -36,7 +36,7 @@ class BootConfdListener implements ListenerInterface
 
     public function process(object $event): void
     {
-        CoordinatorManager::until(Constants::WORKER_EXIT)->yield();
+        CoordinatorManager::until(Constants::WORKER_START)->yield();
         $this->logger->debug('Confd watch start.');
 
         $interval = (int) $this->config->get('confd.interval', 1);
