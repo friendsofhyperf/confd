@@ -16,18 +16,10 @@ use Hyperf\Coordinator\CoordinatorManager;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
 use Hyperf\Framework\Event\MainWorkerStart;
-use Psr\Container\ContainerInterface;
 
 #[Listener()]
 class BootConfdListener implements ListenerInterface
 {
-    private Confd $confd;
-
-    public function __construct(private ContainerInterface $container)
-    {
-        $this->confd = $container->get(Confd::class);
-    }
-
     public function listen(): array
     {
         return [
@@ -37,7 +29,8 @@ class BootConfdListener implements ListenerInterface
 
     public function process(object $event): void
     {
-        $this->confd->watch();
+        $confd = $this->container->get(Confd::class);
+        $confd->watch();
 
         while (true) {
             $isExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield(1);
