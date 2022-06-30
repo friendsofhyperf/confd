@@ -40,13 +40,14 @@ class UpgradeCommand extends HyperfCommand
     public function handle()
     {
         $template = $this->config->get('confd.template');
-        $confd = $this->container->get(Confd::class);
 
         if (! is_file($template)) {
             throw new \Exception($template . ' is not exists!', 1);
         }
 
         $writer = $this->makeWriter($template);
+        $confd = $this->container->get(Confd::class);
+
         $values = $confd->fetch();
 
         $writer->setValues($values)->write();

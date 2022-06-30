@@ -26,7 +26,7 @@ class Confd
     public function __construct(private ContainerInterface $container, private ConfigInterface $config)
     {
         $driver = $this->config->get('confd.default', 'etcd');
-        $class = $this->config->get('confd.drivers.' . $driver);
+        $class = $this->config->get(sprintf('confd.drivers.%s.driver', $driver));
         $this->driver = $container->get($class);
     }
 
