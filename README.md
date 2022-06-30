@@ -15,3 +15,8 @@ composer require friendsofhyperf/confd
 ```shell
 php bin/hyperf.php confd:env
 ```
+
+## Support
+
+- [x] Etcd
+- [] Consul
