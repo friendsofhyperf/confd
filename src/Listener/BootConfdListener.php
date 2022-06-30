@@ -12,6 +12,7 @@ namespace FriendsOfHyperf\Confd\Listener;
 
 use FriendsOfHyperf\Confd\Confd;
 use Hyperf\Contract\ConfigInterface;
+use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Coordinator\Constants;
 use Hyperf\Coordinator\CoordinatorManager;
 use Hyperf\Event\Annotation\Listener;
@@ -22,7 +23,7 @@ use Psr\Container\ContainerInterface;
 #[Listener()]
 class BootConfdListener implements ListenerInterface
 {
-    public function __construct(private ContainerInterface $container, private ConfigInterface $config)
+    public function __construct(private ContainerInterface $container, private ConfigInterface $config, private Confd $confd, private StdoutLoggerInterface $logger)
     {
     }
 
@@ -35,14 +36,15 @@ class BootConfdListener implements ListenerInterface
 
     public function process(object $event): void
     {
-        if (! $this->config->has('confd.default')) {
-            return;
-        }
+        CoordinatorManager::until(Constants::WORKER_EXIT)->yield();
+        $this->logger->debug('Confd watch start.');
 
-        $this->container->get(Confd::class)->watch();
+        $interval = (int) $this->config->get('confd.interval', 1);
+
+        $this->confd->watch();
 
         while (true) {
-            $isExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield(1);
+            $isExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield($interval);
 
             if ($isExited) {
                 break;

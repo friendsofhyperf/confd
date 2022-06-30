@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace FriendsOfHyperf\Confd;
 
 use FriendsOfHyperf\Confd\Driver\DriverInterface;
+use FriendsOfHyperf\Confd\Driver\Etcd;
 use FriendsOfHyperf\Confd\Event\ConfigChanged;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Coordinator\Constants;
@@ -26,7 +27,7 @@ class Confd
     public function __construct(private ContainerInterface $container, private ConfigInterface $config)
     {
         $driver = $this->config->get('confd.default', 'etcd');
-        $class = $this->config->get(sprintf('confd.drivers.%s.driver', $driver));
+        $class = $this->config->get(sprintf('confd.drivers.%s.driver', $driver), Etcd::class);
         $this->driver = $container->get($class);
     }
 
