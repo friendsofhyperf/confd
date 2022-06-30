@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace FriendsOfHyperf\Confd;
 
-class ConfdProvider
+class ConfigProvider
 {
     public function __invoke()
     {
