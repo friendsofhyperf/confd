@@ -9,3 +9,9 @@
 ```shell
 composer require friendsofhyperf/confd
 ```
+
+## Command
+
+```shell
+php bin/hyperf.php confd:env
+```
