@@ -39,7 +39,6 @@ class Confd
     public function watch(): void
     {
         Coroutine::create(function () {
-            CoordinatorManager::until(Constants::WORKER_START)->yield();
             $eventDispatcher = $this->container->get(EventDispatcherInterface::class);
             $interval = (int) $this->config->get('confd.interval', 1);
 
