@@ -31,7 +31,7 @@ return [
         ],
     ],
 
-    'template' => BASE_PATH . '/.env',
+    'env_path' => BASE_PATH . '/.env',
 
     'interval' => 1,
 ];

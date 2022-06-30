@@ -39,20 +39,20 @@ class UpgradeCommand extends HyperfCommand
 
     public function handle()
     {
-        $template = (string) ($this->input->getOption('env-path') ?? $this->config->get('confd.template'));
+        $path = (string) ($this->input->getOption('env-path') ?? $this->config->get('confd.env_path'));
 
-        if (! is_file($template)) {
-            throw new \Exception($template . ' is not exists!', 1);
+        if (! is_file($path)) {
+            throw new \Exception($path . ' is not exists!', 1);
         }
 
-        $writer = $this->makeWriter($template);
+        $writer = $this->makeWriter($path);
         $confd = $this->container->get(Confd::class);
 
         $values = $confd->fetch();
 
         $writer->setValues($values)->write();
 
-        $this->logger->debug($template . ' is updated.');
+        $this->logger->debug($path . ' is updated.');
     }
 
     public function makeWriter(string $path): Writer
