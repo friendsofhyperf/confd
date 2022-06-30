@@ -11,20 +11,18 @@ declare(strict_types=1);
 namespace FriendsOfHyperf\Confd\Driver;
 
 use Hyperf\Contract\ConfigInterface;
+use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Etcd\V3\KV;
 use Psr\Container\ContainerInterface;
 
 class Etcd implements DriverInterface
 {
-    private ConfigInterface $config;
-
     private KV $client;
 
     private ?string $hash = null;
 
-    public function __construct(private ContainerInterface $container)
+    public function __construct(private ContainerInterface $container, private ConfigInterface $config, private StdoutLoggerInterface $logger)
     {
-        $this->config = $container->get(ConfigInterface::class);
         $this->client = make(KV::class, [
             'uri' => $this->config->get('confd.drivers.etcd.client.uri'),
             'version' => $this->config->get('confd.drivers.etcd.client.version', 'v3beta'),
@@ -57,6 +55,8 @@ class Etcd implements DriverInterface
             ->mapWithKeys(fn ($kv) => [$kv['key'] => $kv['value']])
             ->toArray();
         $hash = $this->getHash($values);
+
+        $this->logger->debug(sprintf('pre_hash:%s cur_hash:%s', $this->hash, $hash));
 
         if ($this->hash && $this->hash != $hash) {
             return true;
