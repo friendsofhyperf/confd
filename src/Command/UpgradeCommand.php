@@ -50,7 +50,7 @@ class UpgradeCommand extends HyperfCommand
 
         $values = $confd->fetch();
 
-        $writer->setValues($values, true)->write();
+        $writer->setValues($values)->write();
 
         $this->logger->debug($template . ' is updated.');
     }
