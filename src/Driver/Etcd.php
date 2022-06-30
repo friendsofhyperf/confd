@@ -20,7 +20,7 @@ class Etcd implements DriverInterface
 
     private KV $client;
 
-    private ?string $hash;
+    private ?string $hash = null;
 
     public function __construct(private ContainerInterface $container)
     {
