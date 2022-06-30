@@ -21,7 +21,7 @@ use Psr\Container\ContainerInterface;
 #[Command()]
 class UpgradeCommand extends HyperfCommand
 {
-    protected ?string $signature = 'confd:env';
+    protected ?string $signature = 'confd:env {--E|env-path= : Path of .env.}';
 
     protected string $description = 'Upgrade .env from etcd.';
 
@@ -39,7 +39,7 @@ class UpgradeCommand extends HyperfCommand
 
     public function handle()
     {
-        $template = $this->config->get('confd.template');
+        $template = (string) ($this->input->getOption('env-path') ?? $this->config->get('confd.template'));
 
         if (! is_file($template)) {
             throw new \Exception($template . ' is not exists!', 1);
