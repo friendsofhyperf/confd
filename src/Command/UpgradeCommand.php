@@ -42,7 +42,8 @@ class UpgradeCommand extends HyperfCommand
         $path = (string) ($this->input->getOption('env-path') ?? $this->config->get('confd.env_path'));
 
         if (! is_file($path)) {
-            throw new \Exception($path . ' is not exists!', 1);
+            $this->error($path . ' is not exists!');
+            return;
         }
 
         $writer = $this->makeWriter($path);
@@ -52,7 +53,7 @@ class UpgradeCommand extends HyperfCommand
 
         $writer->setValues($values)->write();
 
-        $this->logger->debug($path . ' is updated.');
+        $this->logger->info($path . ' is updated.');
     }
 
     public function makeWriter(string $path): Writer
