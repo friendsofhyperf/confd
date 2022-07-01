@@ -24,8 +24,8 @@ class Etcd implements DriverInterface
     public function __construct(private ContainerInterface $container, private ConfigInterface $config, private StdoutLoggerInterface $logger)
     {
         $this->client = make(KV::class, [
-            'uri' => $this->config->get('confd.drivers.etcd.client.uri'),
-            'version' => $this->config->get('confd.drivers.etcd.client.version', 'v3beta'),
+            'uri' => (string) $this->config->get('confd.drivers.etcd.client.uri', ''),
+            'version' => (string) $this->config->get('confd.drivers.etcd.client.version', 'v3beta'),
             'options' => [
                 'timeout' => (int) $this->config->get('confd.drivers.etcd.client.timeout', 10),
             ],
@@ -34,8 +34,8 @@ class Etcd implements DriverInterface
 
     public function fetch(): array
     {
-        $namespace = $this->config->get('confd.drivers.etcd.namespace');
-        $mapping = $this->config->get('confd.drivers.etcd.mapping', []);
+        $namespace = (string) $this->config->get('confd.drivers.etcd.namespace', '');
+        $mapping = (array) $this->config->get('confd.drivers.etcd.mapping', []);
         $kvs = (array) ($this->client->fetchByPrefix($namespace)['kvs'] ?? []);
 
         return collect($kvs)
@@ -46,8 +46,8 @@ class Etcd implements DriverInterface
 
     public function isChanged(): bool
     {
-        $namespace = $this->config->get('confd.drivers.etcd.namespace');
-        $watches = $this->config->get('confd.drivers.etcd.watches');
+        $namespace = (string) $this->config->get('confd.drivers.etcd.namespace', '');
+        $watches = (array) $this->config->get('confd.drivers.etcd.watches', []);
 
         $kvs = (array) ($this->client->fetchByPrefix($namespace)['kvs'] ?? []);
         $values = collect($kvs)

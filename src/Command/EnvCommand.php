@@ -19,7 +19,7 @@ use Hyperf\Contract\StdoutLoggerInterface;
 use Psr\Container\ContainerInterface;
 
 #[Command()]
-class UpgradeCommand extends HyperfCommand
+class EnvCommand extends HyperfCommand
 {
     protected ?string $signature = 'confd:env {--E|env-path= : Path of .env.}';
 
