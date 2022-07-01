@@ -37,7 +37,7 @@ class WatchOnBootListener implements ListenerInterface
     public function process(object $event): void
     {
         $this->confd->watch();
-        $this->logger->debug('Confd start watching.');
+        $this->logger->debug('[confd] Start watching.');
 
         while (true) {
             $isWorkerExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield(1);
