@@ -16,6 +16,40 @@ composer require friendsofhyperf/confd
 php bin/hyperf.php confd:env
 ```
 
+## Listener
+
+```php
+<?php
+
+namespace App\Listener;
+
+use FriendsOfHyperf\Confd\Event\ConfigChanged;
+use Hyperf\Contract\StdoutLoggerInterface;
+use Hyperf\Event\Annotation\Listener;
+use Hyperf\Event\Contract\ListenerInterface;
+
+#[Listener()]
+class ConfigChangedListener implements ListenerInterface
+{
+    public function __construct(private StdoutLoggerInterface $logger)
+    {
+    }
+
+    public function listen(): array
+    {
+        return [
+            ConfigChanged::class,
+        ];
+    }
+
+    public function process(object $event): void
+    {
+        $this->logger->warning('[confd] ConfdChanged');
+        // do something
+    }
+}
+```
+
 ## Support
 
 - [x] Etcd
