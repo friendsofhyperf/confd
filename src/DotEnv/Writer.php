@@ -23,31 +23,23 @@ class Writer
 {
     /**
      * The .env file content.
-     *
-     * @var string
      */
-    protected $content;
+    protected string $content;
 
     /**
      * Path to the .env file.
-     *
-     * @var string
      */
-    protected $path;
+    protected string $path;
 
     /**
      * Parsed variables, just for reference, not properly type-casted.
-     *
-     * @var array
      */
-    protected $variables = [];
+    protected array $variables = [];
 
     /**
      * Stores if a change was made.
-     *
-     * @var bool
      */
-    protected $changed = false;
+    protected bool $changed = false;
 
     /**
      * Constructs a new instance.

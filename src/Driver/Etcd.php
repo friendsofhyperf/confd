@@ -56,9 +56,8 @@ class Etcd implements DriverInterface
             ->toArray();
         $hash = $this->getHash($values);
 
-        $this->logger->debug(sprintf('pre_hash:%s cur_hash:%s', $this->hash, $hash));
-
         if ($this->hash && $this->hash != $hash) {
+            $this->logger->debug(sprintf('Config changed, pre_hash:%s cur_hash:%s.', $this->hash, $hash));
             return true;
         }
 

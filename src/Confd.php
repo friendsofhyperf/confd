@@ -43,9 +43,9 @@ class Confd
             $interval = (int) $this->config->get('confd.interval', 1);
 
             while (true) {
-                $isExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield($interval);
+                $isWorkerExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield($interval);
 
-                if ($isExited) {
+                if ($isWorkerExited) {
                     break;
                 }
 

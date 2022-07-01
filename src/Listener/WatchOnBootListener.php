@@ -21,7 +21,7 @@ use Hyperf\Framework\Event\MainWorkerStart;
 use Psr\Container\ContainerInterface;
 
 #[Listener()]
-class BootConfdListener implements ListenerInterface
+class WatchOnBootListener implements ListenerInterface
 {
     public function __construct(private ContainerInterface $container, private ConfigInterface $config, private Confd $confd, private StdoutLoggerInterface $logger)
     {
@@ -36,14 +36,13 @@ class BootConfdListener implements ListenerInterface
 
     public function process(object $event): void
     {
-        $this->logger->debug('Confd watch start.');
-
         $this->confd->watch();
+        $this->logger->debug('Confd watch started.');
 
         while (true) {
-            $isExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield(1);
+            $isWorkerExited = CoordinatorManager::until(Constants::WORKER_EXIT)->yield(1);
 
-            if ($isExited) {
+            if ($isWorkerExited) {
                 break;
             }
         }
