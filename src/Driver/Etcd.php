@@ -19,7 +19,7 @@ class Etcd implements DriverInterface
 {
     private KV $client;
 
-    private ?string $hash = null;
+    private ?string $hashCache = null;
 
     public function __construct(private ContainerInterface $container, private ConfigInterface $config, private StdoutLoggerInterface $logger)
     {
@@ -54,16 +54,18 @@ class Etcd implements DriverInterface
             ->filter(fn ($kv) => in_array($kv['key'], $watches))
             ->mapWithKeys(fn ($kv) => [$kv['key'] => $kv['value']])
             ->toArray();
-        $hash = $this->getHash($values);
 
-        if ($this->hash && $this->hash != $hash) {
-            $this->logger->debug(sprintf('[confd#etcd] Config changed, pre_hash:%s cur_hash:%s.', $this->hash, $hash));
-            return true;
-        }
+        $newHash = $this->getHash($values);
+        $oldHash = $this->hashCache;
 
-        $this->hash = $hash;
+        return tap($oldHash && $oldHash != $newHash, function ($isChanged) use ($oldHash, $newHash) {
+            if ($isChanged) {
+                $this->logger->debug(sprintf('[confd#etcd] Config changed, pre_hash:%s cur_hash:%s.', $oldHash, $newHash));
+            }
 
-        return false;
+            // Upgrade new hash to cache
+            $this->hashCache = $newHash;
+        });
     }
 
     private function getHash($value): string
