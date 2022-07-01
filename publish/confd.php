@@ -32,6 +32,7 @@ return [
     ],
 
     'env_path' => BASE_PATH . '/.env',
-
     'interval' => 1,
+    'reload_api' => '',// the api of reload service
+    'reload_lock_key' => '',// multi node reload lock key with redis
 ];
