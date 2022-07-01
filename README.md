@@ -7,10 +7,12 @@
 ## Installation
 
 ```shell
-composer require friendsofhyperf/confd
+composer require friendsofhyperf/confd:^1.0
 ```
 
 ## Command
+
+Fetch configs from etcd/consul and upgrade `.env`.
 
 ```shell
 php bin/hyperf.php confd:env
