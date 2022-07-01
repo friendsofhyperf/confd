@@ -57,7 +57,7 @@ class Etcd implements DriverInterface
         $hash = $this->getHash($values);
 
         if ($this->hash && $this->hash != $hash) {
-            $this->logger->debug(sprintf('Config changed, pre_hash:%s cur_hash:%s.', $this->hash, $hash));
+            $this->logger->debug(sprintf('[confd#etcd] Config changed, pre_hash:%s cur_hash:%s.', $this->hash, $hash));
             return true;
         }
 
